@@ -1,3 +1,17 @@
+libmspack (0.5-1+deb9u2) stretch-security; urgency=high
+
+  * Non-maintainer upload.
+  * Add security related patches:
+    - 0b0ef9344255 ("kwaj_read_headers(): fix handling of non-terminated
+      strings") CVE-2018-14681 (Closes: 904799).
+    - 4fd9ccaa54e1 ("Fix off-by-one error in chmd TOLOWER() fallback")
+      CVE-2018-14682 (Closes: 904800).
+    - 72e70a921f0f ("Fix off-by-one bounds check on CHM PMGI/PMGL chunk
+      numbers and reject empty filenames.") CVE-2018-14679,
+      CVE-2018-14680 (Closes: 904802, 904801).
+
+ -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Thu, 02 Aug 2018 19:18:37 +0200
+
 libmspack (0.5-1+deb9u1) stretch-security; urgency=high
 
   * Non-maintainer upload.
