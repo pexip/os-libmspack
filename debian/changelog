@@ -1,3 +1,9 @@
+libmspack (0.5-1+deb9u1pexip1) pexip; urgency=medium
+
+  * Prepare Pexip packaging
+
+ -- John-Mark Bell <jmb@pexip.com>  Fri, 03 Aug 2018 17:49:43 +0000
+
 libmspack (0.5-1+deb9u1) stretch-security; urgency=high
 
   * Non-maintainer upload.
