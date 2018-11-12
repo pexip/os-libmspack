@@ -1,3 +1,21 @@
+libmspack (0.5-1+deb9u3pexip1) pexip; urgency=medium
+
+  * New upstream release
+
+ -- John-Mark Bell <jmb@pexip.com>  Mon, 12 Nov 2018 19:44:15 +0000
+
+libmspack (0.5-1+deb9u3) stretch; urgency=high
+
+  * Non-maintainer upload by the LTS Team. 
+  * CVE-2018-18584 (Closes: #911640)
+    Fixing the size of the CAB block input buffer, which is too small
+    for the maximal Quantum block, prevents an out-of-bounds write.
+  * CVE-2018-18585 (Closes: #911637)
+    Blank filenames (having length zero or their 1st or 2nd byte is
+    null) should be rejected.
+ 
+ -- Thorsten Alteholz <debian@alteholz.de>  Fri, 26 Oct 2018 19:03:02 +0200
+
 libmspack (0.5-1+deb9u2pexip1) pexip; urgency=medium
 
   * New upstream release
