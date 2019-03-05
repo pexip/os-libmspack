@@ -4,11 +4,19 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 
 %:
-	dh $@ --with autoreconf --with autotools_dev
+	dh $@
 
 override_dh_autoreconf:
 	dh_autoreconf --as-needed
 
+override_dh_auto_build-indep:
+	dh_auto_build
+	$(MAKE) -C doc
+
+override_dh_auto_clean:
+	[ -f doc/Makefile ] && $(MAKE) -C doc clean
+	dh_auto_clean
+
 override_dh_strip:
-	dh_strip --dbg-package=libmspack-dbg
+	dh_strip --dbgsym-migration='libmspack-dbg (<< 0.6-1~)'
 

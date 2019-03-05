@@ -1,7 +1,9 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: libmspack
 Upstream-Contact: Stuart Caie <kyzer@4u.net>
-Source: http://www.cabextract.org.uk/libmspack/
+Source: https://www.cabextract.org.uk/libmspack/
+# doxygen-generated doc which is embedded in the upstream tarball; regenerated in the Debian build
+Files-excluded: doc/html
 
 
 Files: *
