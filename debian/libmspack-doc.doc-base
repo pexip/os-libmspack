@@ -5,6 +5,6 @@ Abstract: Doxygen-generated API documentation.
 Section: Programming/C
 
 Format: HTML
-Index: /usr/share/doc/libmspack-doc/index.html
-Files: /usr/share/doc/libmspack-doc/*
+Index: /usr/share/doc/libmspack-dev/index.html
+Files: /usr/share/doc/libmspack-dev/*
 

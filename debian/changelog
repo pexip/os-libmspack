@@ -1,20 +1,83 @@
+libmspack (0.10.1-1) unstable; urgency=medium
+
+  * New upstream release:
+    + fix build on big-endian systems (Closes: #914794)
+  * Add missing JS files for documentation menu and search functions.
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Tue, 05 Mar 2019 19:03:29 +0900
+
+libmspack (0.9.1-1) unstable; urgency=medium
+
+  * New upstream release:
+    + fix regression when extracting cabinets using -F option
+      (Closes: #912687)
+  * Bump Standards-Version to 4.2.1.
+  * Adapt to documentation now generated in 'doc/html'.
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Tue, 06 Nov 2018 22:38:49 +0900
+
+libmspack (0.8-1) unstable; urgency=medium
+
+  * New upstream release:
+    + CVE-2018-18585 (Closes: #911637)
+    + CVE-2018-18584 (Closes: #911640)
+    + CVE-2018-18586 (Closes: #911639)
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Wed, 24 Oct 2018 10:03:13 +0900
+
+libmspack (0.7-1) unstable; urgency=medium
+
+  * NUR:
+    + fix CVE-2018-14679 (Closes: #904802)
+    + fix CVE-2018-14680 (Closes: #904801)
+    + fix CVE-2018-14682 (Closes: #904800)
+    + fix CVE-2018-14681 (Closes: #904799)
+  * Add lintian exception for source-contains-prebuilt-ms-help-file in
+    the test files.
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Sun, 29 Jul 2018 18:53:39 +0900
+
+libmspack (0.6-4) unstable; urgency=medium
+
+  * Updated VCS URLs (Alioth->Salsa).
+  * Switch to compat level 11.
+  * Bump Standards-Version to 4.1.4.
+  * Add missing build dependency on 'graphviz' for the documentation.
+  * Adapt doc reference since it is now in the main package.
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Thu, 12 Apr 2018 19:26:12 +0900
+
+libmspack (0.6-3) unstable; urgency=medium
+
+  * Move doc generation in dh's indep rules to fix FTBFS
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Thu, 17 Aug 2017 09:49:02 +0900
+
+libmspack (0.6-2) unstable; urgency=medium
+
+  * Missing dependency on 'doxygen' for doc creation (Closes: #872193)
+  * Fixed lintian useless-autoreconf-build-depends.
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Thu, 17 Aug 2017 08:16:01 +0900
+
+libmspack (0.6-1) unstable; urgency=medium
+
+  * New upstream release:
+    + Fix CVE-2017-6419 (Closes: #871263)
+    + Fix CVE-2017-11423 (Closes: #868956)
+  * Fix building documentation.
+  * Use HTTPS in package metadata.
+  * Transition to automatic debug packages.
+  * Package now conforms to Standards-Version 4.0.0.
+  * Switch to compat level 10.
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Tue, 15 Aug 2017 06:08:38 +0900
+
 libmspack (0.5-1+deb9u3pexip1) pexip; urgency=medium
 
   * New upstream release
 
  -- John-Mark Bell <jmb@pexip.com>  Mon, 12 Nov 2018 19:44:15 +0000
-
-libmspack (0.5-1+deb9u3) stretch; urgency=high
-
-  * Non-maintainer upload by the LTS Team. 
-  * CVE-2018-18584 (Closes: #911640)
-    Fixing the size of the CAB block input buffer, which is too small
-    for the maximal Quantum block, prevents an out-of-bounds write.
-  * CVE-2018-18585 (Closes: #911637)
-    Blank filenames (having length zero or their 1st or 2nd byte is
-    null) should be rejected.
- 
- -- Thorsten Alteholz <debian@alteholz.de>  Fri, 26 Oct 2018 19:03:02 +0200
 
 libmspack (0.5-1+deb9u2pexip1) pexip; urgency=medium
 
@@ -22,36 +85,11 @@ libmspack (0.5-1+deb9u2pexip1) pexip; urgency=medium
 
  -- John-Mark Bell <jmb@pexip.com>  Mon, 03 Sep 2018 15:48:21 +0100
 
-libmspack (0.5-1+deb9u2) stretch-security; urgency=high
-
-  * Non-maintainer upload.
-  * Add security related patches:
-    - 0b0ef9344255 ("kwaj_read_headers(): fix handling of non-terminated
-      strings") CVE-2018-14681 (Closes: 904799).
-    - 4fd9ccaa54e1 ("Fix off-by-one error in chmd TOLOWER() fallback")
-      CVE-2018-14682 (Closes: 904800).
-    - 72e70a921f0f ("Fix off-by-one bounds check on CHM PMGI/PMGL chunk
-      numbers and reject empty filenames.") CVE-2018-14679,
-      CVE-2018-14680 (Closes: 904802, 904801).
-
- -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Thu, 02 Aug 2018 19:18:37 +0200
-
 libmspack (0.5-1+deb9u1pexip1) pexip; urgency=medium
 
   * Prepare Pexip packaging
 
  -- John-Mark Bell <jmb@pexip.com>  Fri, 03 Aug 2018 17:49:43 +0000
-
-libmspack (0.5-1+deb9u1) stretch-security; urgency=high
-
-  * Non-maintainer upload.
-  * Correct rejection of empty strings.
-  * Fix mis-handling of sys->read() errors in cabd_read_string()
-    (CVE-2017-11423) (Closes: #868956).
-  * Reject negative output length in SpanInfo (CVE-2017-6419)
-    (Closes: #871263).
-
- -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Wed, 16 Aug 2017 21:42:50 +0200
 
 libmspack (0.5-1) unstable; urgency=medium
 

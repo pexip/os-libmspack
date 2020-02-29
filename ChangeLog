@@ -1,3 +1,269 @@
+2019-02-18  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* chmd_read_headers(): a CHM file name beginning "::" but shorter
+	than 33 bytes will lead to reading past the freshly-allocated name
+	buffer - checks for specific control filenames didn't take length
+	into account. Thanks to ADLab of Venustech for the report and
+	proof of concept.
+
+2019-02-18  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* chmd_read_headers(): CHM files can declare their chunks are any
+	size up to 4GB, and libmspack will attempt to allocate that to
+	read the file.
+
+	This is not a security issue; libmspack doesn't promise how much
+	memory it'll use to unpack files. You can set your own limits by
+	returning NULL in a custom mspack_system.alloc() implementation.
+
+	However, it would be good to validate chunk size further. With no
+	offical specification, only empirical data is available. All files
+	created by hhc.exe have a chunk size of 4096 bytes, and this is
+	matched by all the files I've found in the wild, except for one
+	which has a chunk size of 8192 bytes, which was created by someone
+	developing a CHM file creator 15 years ago, and they appear to
+	have abandoned it, so it seems 4096 is a de-facto standard.
+
+	I've changed the "chunk size is not a power of two" warning to
+	"chunk size is not 4096", and now only allow chunk sizes between
+	22 and 8192 bytes. If you have CHM files with a larger chunk size,
+	please send them to me and I'll increase this upper limit.
+
+	Thanks to ADLab of Venustech for the report.
+
+2019-02-18  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* oabd.c: replaced one-shot copying of uncompressed blocks (which
+	requires allocating a buffer of the size declared in the header,
+	which can be 4GB) with a fixed-size buffer. The buffer size is
+	user-controllable with the new msoab_decompressor::set_param()
+	method (check you have version 2 of the OAB decompressor), and
+	also controls the input buffer used for OAB's LZX decompression.
+
+	Reminder: compression formats can dictate how much memory is
+	needed to decompress them. If memory usage is a security concern
+	to you, write a custom mspack_system.alloc() that returns NULL
+	if "too much" memory is requested. Do not rely on libmspack adding
+	special heuristics to know not to request "too much".
+
+	Thanks to ADLab of Venustech for the report.
+
+2018-11-03  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* configure.ac, doc/Makefile.in, doc/Doxyfile.in: remove these
+	template files and replace with static files. You can still build
+	the documentation with make -C doc
+
+2018-11-03  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* Makefile.am, src: move the "useful" programs in src/ to examples/
+	and don't auto-install them. Even though they're useful, they are
+	intended as examples and aren't productised (no commmand-line
+	options, no man pages, etc.) -- if you disagree, feel free to
+	send in a patch
+
+2018-11-01  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* cabd_extract(): would not do decompression for random-access
+	offsets if the folder type was LZX. This is a fairly major bug,
+	and affects any decompression where you skip directly to a file,
+	or decompress data out-of-order. Thanks to austin987 for alerting
+	me to this.
+
+	This bug was introduced by the recent 'salvage mode' patch. Even
+	though I'd reviewed all the differences in clamav's copy of
+	libmspack and said "wtf" to this particular change, I didn't
+	notice it was still in the resulting patch I merged. Mea culpa :)
+
+	* test/cabd_test.c: now has a regression test to cover this
+
+2018-10-31  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* Makefile.am, test/*_test.c: use the automake test-suite system
+	with the test-suite programs (cabd_test, chmd_test, kwajd_test).
+	This also fixes a longstanding bugbear that these programs don't
+	access their test files using an absolute path. Now this is passed
+	to them and you can run them from any directory. Thanks to Richard
+	Jones for requesting this.
+
+2018-10-31  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* configure.ac: require at least automake 1.11, use AM_SILENT_RULES
+	unconditionally
+
+2018-10-30  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* configure.ac: remove obsolescent C library tests. AC_HEADER_STDC is
+	removed, and so are most checks for standard C headers. libmspack now
+	makes these assumptions:
+	- <ctype.h> <limits.h> <stdlib.h> <string.h> exist
+	- <ctype.h> defines tolower()
+	- <string.h> defines memset(), memcmp(), strlen()
+	- if towlower() exists, it's defined in <wctype.h>
+
+2018-10-22  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* cabd.c: remove the only use of assert()
+
+2018-10-20  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* src/chmextract.c: add anti "../" and leading slash protection to
+	chmextract. I'm not pleased about this. All the sample code provided
+	with libmspack is meant to be simple examples of library use, not
+	"productised" binaries. Making the "useful" code samples install
+	as binaries was a mistake. They were never intended to protect you
+	from unpacking archive files with relative/absolute paths, and I
+	would prefer that they never will be.
+
+2018-10-17  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* cab.h: Make the CAB block input buffer one byte larger, to allow
+	a maximum-allowed-size input block and the special extra byte added
+	after the block by cabd_sys_read_block to help Quantum alignment.
+	Thanks to Henri Salo for reporting this.
+
+2018-10-17  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* chmd_read_headers(): again reject files with blank filenames, this
+	time because their 1st or 2nd byte is null, not because their length
+	is zero.  Thanks again to Hanno Böck for finding the issue.
+
+2018-10-16  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* Makefile.am: using automake _DEPENDENCIES for chmd_test appears to
+	override the default dependencies (e.g. sources), so libchmd.la was no
+	longer considered a dependency of chmd_test. This breaks parallel
+	builds like "make -j4". Added libchmd.la explicitly to dependencies.
+	Thanks to Thomas Deutschmann for reporting this.
+
+2018-10-16  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* cabd.c: add new parameter, MSCABD_PARAM_SALVAGE, which makes CAB file
+	reading and extraction more lenient, to allow damaged or mangled CABs
+	to be extracted. When enabled:
+	- cabd->open() won't reject cabinets with files that have invalid
+	  folder indices or filenames. These files will simply be skipped
+	- cabd->extract() won't reject files with invalid lengths, but will
+	  limit them to the maximum possible
+	- block output sizes over 32768 bytes won't be rejected
+	- invalid data block checksums won't be rejected
+	
+	It's still possible for corrupted files to fail extraction, but more
+	data can be extracted before they do.
+	
+	This new parameter doesn't affect the existing MSCABD_PARAM_FIXMSZIP
+	parameter, which ignores MSZIP decompression failures. You can enable
+	both at once.
+	
+	Thanks to Micah Snyder from ClamAV for working with me to get this
+	feature into libmspack. This also helps ClamAV move towards using a
+	vanilla copy of libmspack without needing their own patchset.
+
+2018-08-13  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* mspack.h: clarify that mspack_system.free() should allow NULL. If your
+	mspack_system implementation doesn't, it would already have crashed, as
+	there are several places where libmspack calls sys->free(NULL). This
+	change makes it official, and amends a few "if (x) sys->free(x)" cases
+	to the simpler "sys->free(x)" to make it clearer.
+
+2018-08-09  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* Makefile.am: the test file cve-2015-4467-reset-interval-zero.chm is
+	detected by ClamAV as BC.Legacy.Exploit.CVE_2012_1458-1 "infected".
+	My hosting deletes anything that ClamAV calls "infected", so has been
+	continually deleting the official libmspack 0.7alpha release.
+	
+	CVE-2012-1458 is the same issue as CVE-2015-4467: both libmspack, and
+	ClamAV using libmspack, could get a division-by-zero crash when the LZX
+	reset interval was zero. This was fixed years ago, but ClamAV still has 
+	it as a signature, which today prevents me from releasing libmspack.
+	
+	BC.Legacy.Exploit.CVE_2012_1458-1 is a bytecode signature, so I can't
+	see the exact trigger conditions, but I can see that it looks for the
+	"LZXC" signature of the LZX control file, so I've changed this to
+	"lzxc" and added a step in the Makefile to change it back to LZXC, so
+	I can release libmspack whether or not ClamAV keeps the signature.
+
+2018-04-26  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* read_chunk(): the test that chunk numbers are in bounds was off
+	by one, so read_chunk() returned a pointer taken from outside
+	allocated memory that usually crashes libmspack when accessed.
+	Thanks to Hanno Böck for finding the issue and providing a sample.
+
+	* chmd_read_headers(): reject files with blank filenames. Thanks
+	again to Hanno Böck for finding the issue and providing a sample file.
+
+2018-02-06  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* chmd.c: fixed an off-by-one error in the TOLOWER() macro, reported
+	by Dmitry Glavatskikh. Thanks Dmitry!
+
+2017-11-26  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* kwajd_read_headers(): fix up the logic of reading the filename and
+	extension headers to avoid a one or two byte overwrite. Thanks to
+	Jakub Wilk for finding the issue.
+
+	* test/kwajd_test.c: add tests for KWAJ filename.ext handling
+
+2017-10-16  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* test/cabd_test.c: update the short string tests to expect not only
+	MSPACK_ERR_DATAFORMAT but also MSPACK_ERR_READ, because of the recent
+	change to cabd_read_string(). Thanks to maitreyee43 for spotting this.
+
+	* test/msdecompile_md5: update the setup instructions for this script,
+	and also change the script so it works with current Wine. Again, thanks
+	to maitreyee43 for trying to use it and finding it not working.
+
+2017-08-13  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* src/chmextract.c: support MinGW one-arg mkdir(). Thanks to AntumDeluge
+	for reporting this.
+
+2017-08-13  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* read_spaninfo(): a CHM file can have no ResetTable and have a
+	negative length in SpanInfo, which then feeds a negative output length
+	to lzxd_init(), which then sets frame_size to a value of your choosing,
+	the lower 32 bits of output length, larger than LZX_FRAME_SIZE. If the
+	first LZX block is uncompressed, this writes data beyond the end of the
+	window. This issue was raised by ClamAV as CVE-2017-6419.  Thanks to
+	Sebastian Andrzej Siewior for finding this by chance!
+
+	* lzxd_init(), lzxd_set_output_length(), mszipd_init(): due to the issue
+	mentioned above, these functions now reject negative lengths
+
+2017-08-05  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* cabd_read_string(): add missing error check on result of read().
+	If an mspack_system implementation returns an error, it's interpreted
+	as a huge positive integer, which leads to reading past the end of the
+	stack-based buffer. Thanks to Sebastian Andrzej Siewior for explaining
+	the problem. This issue was raised by ClamAV as CVE-2017-11423
+
+2016-04-20  Stuart Caie <kyzer@cabextract.org.uk>
+
+	* configure.ac: change my email address to kyzer@cabextract.org.uk
+
+2015-05-10  Stuart Caie <kyzer@4u.net>
+
+	* cabd_read_string(): correct rejection of empty strings. Thanks to
+	Hanno Böck for finding the issue and providing a sample file.
+
+2015-05-10  Stuart Caie <kyzer@4u.net>
+
+	* Makefile.am: Add subdir-objects option as suggested by autoreconf.
+
+	* configure.ac: Add AM_PROG_AR as suggested by autoreconf.
+
+2015-01-29  Stuart Caie <kyzer@4u.net>
+
+	* system.h: if C99 inttypes.h exists, use its PRI{d,u}{32,64} macros.
+	Thanks to Johnathan Kollasch for the suggestion.
+
 2015-01-18  Stuart Caie <kyzer@4u.net>
 
 	* lzxd_decompress(): the byte-alignment code for reading uncompressed
@@ -37,7 +303,7 @@
 	null and thus segfault. Thanks to Jakub Wilk again.
 
 	* cabd_read_string: reject empty strings. They are not found in any
-	valid CAB files. Thanks to Hanno B�ck for sending me an example.
+	valid CAB files. Thanks to Hanno Böck for sending me an example.
 
 2015-01-05  Stuart Caie <kyzer@4u.net>
 
@@ -92,9 +358,9 @@
 
 2011-11-23  Stuart Caie <kyzer@4u.net>
 
-	* chmd_fast_find(): add a simple check against infinite PGML
+	* chmd_fast_find(): add a simple check against infinite PMGL
 	loops. Thanks to Sergei Trofimovich for finding sample files.
-	Multi-step PGML or PGMI infinite loops remain possible.
+	Multi-step PMGL/PMGI infinite loops remain possible.
 
 2011-06-17  Stuart Caie <kyzer@4u.net>
 
@@ -213,7 +479,7 @@
 2011-04-26:  Stuart Caie <kyzer@4u.net>
 
 	* test/chminfo.c: more sanity checks for corrupted CHM files where
-	entries go past the end of a PGML/PGMI chunk, thanks to
+	entries go past the end of a PMGL/PMGI chunk, thanks to
 	Sergei Trofimovich for sending me examples and analysis.
 
 2011-04-25:  Stuart Caie <kyzer@4u.net>
@@ -459,7 +725,7 @@
 2005-03-22:  Stuart Caie   <kyzer@4u.net>
 
 	* system.h: now undefs "read", as the latest glibc defines read()
-	as a macro which messes everything up. Thanks to Ville Skytt� for
+	as a macro which messes everything up. Thanks to Ville Skyttä for
 	the update.
 
 2005-03-14:  Stuart Caie   <kyzer@4u.net>
