@@ -1,3 +1,9 @@
+libmspack (0.10.1-1pexip1) pexip; urgency=medium
+
+  * Migrate to Buster
+
+ -- Vincent Sanders <vince@pexip.com>  Sat, 29 Feb 2020 10:30:14 +0000
+
 libmspack (0.10.1-1) unstable; urgency=medium
 
   * New upstream release:
