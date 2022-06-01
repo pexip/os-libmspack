@@ -1,3 +1,13 @@
+libmspack (0.10.1-2) unstable; urgency=medium
+
+  [ Debian Janitor ]
+  * Trim trailing whitespace.
+  * Move source package lintian overrides to debian/source.
+  * Bump debhelper from old 11 to 12.
+  * Set debhelper-compat version in Build-Depends.
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Mon, 10 Feb 2020 03:50:50 +0900
+
 libmspack (0.10.1-1pexip2) pexip; urgency=medium
 
   * Rebuild in buster environment
