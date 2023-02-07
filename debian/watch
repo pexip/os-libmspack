@@ -1,2 +1,2 @@
-version=3
-https://www.cabextract.org.uk/libmspack/libmspack-([\d.]+)alpha.tar.gz
+version=4
+https://www.cabextract.org.uk/libmspack/ libmspack-([\d.]+)alpha.tar.gz
