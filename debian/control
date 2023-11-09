@@ -9,7 +9,7 @@ Build-Depends-indep: doxygen, graphviz
 Vcs-Browser: https://salsa.debian.org/debian/libmspack
 Vcs-Git: https://salsa.debian.org/debian/libmspack.git
 Homepage: https://www.cabextract.org.uk/libmspack/
-XS-Pexip-Upstream: http://deb.debian.org/debian/ bullseye
+XS-Pexip-Upstream: http://deb.debian.org/debian/ bookworm
 
 Package: libmspack0
 Architecture: any
