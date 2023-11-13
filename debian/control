@@ -3,7 +3,7 @@ Section: libs
 Priority: optional
 Maintainer: Pexip AS <packaging@pexip.com>
 XSBC-Pexip-Original-Maintainer: Marc Dequènes (Duck) <Duck@DuckCorp.org>
-Standards-Version: 4.2.1
+Standards-Version: 4.6.2
 Build-Depends: dpkg-dev (>= 1.16.1.1), debhelper-compat (= 12)
 Build-Depends-indep: doxygen, graphviz
 Vcs-Browser: https://salsa.debian.org/debian/libmspack
@@ -36,6 +36,9 @@ Description: library for Microsoft compression formats (development files)
  Microsoft Help (.HLP), COMPRESS.EXE [KWAJ], Microsoft Cabinet (.CAB),
  HTML Help (.CHM), Microsoft eBook (.LIT), Windows Imaging Format (.WIM),
  Exchange Offline Address Book (.LZX).
+ .
+ This package contains the development files, including headers and
+ pkgconf configuration.
 
 Package: libmspack-doc
 Architecture: all
@@ -50,3 +53,5 @@ Description: library for Microsoft compression formats (documentation)
  Microsoft Help (.HLP), COMPRESS.EXE [KWAJ], Microsoft Cabinet (.CAB),
  HTML Help (.CHM), Microsoft eBook (.LIT), Windows Imaging Format (.WIM),
  Exchange Offline Address Book (.LZX).
+ .
+ This package contains the API documentation.
