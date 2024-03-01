@@ -1,3 +1,10 @@
+libmspack (0.11-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Rename libraries for 64-bit time_t transition.  Closes: #1063130
+
+ -- Benjamin Drung <bdrung@debian.org>  Fri, 01 Mar 2024 12:22:47 +0000
+
 libmspack (0.11-1) unstable; urgency=medium
 
   * NUR.
