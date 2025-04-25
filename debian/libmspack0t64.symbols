@@ -1,4 +1,4 @@
-libmspack.so.0 libmspack0 #MINVER#
+libmspack.so.0 libmspack0t64 #MINVER#
 * Build-Depends-Package: libmspack-dev
  mspack_create_cab_compressor@Base 0.4
  mspack_create_cab_decompressor@Base 0.4

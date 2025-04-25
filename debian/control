@@ -4,14 +4,17 @@ Priority: optional
 Maintainer: Pexip AS <packaging@pexip.com>
 XSBC-Pexip-Original-Maintainer: Marc Dequènes (Duck) <Duck@DuckCorp.org>
 Standards-Version: 4.6.2
-Build-Depends: dpkg-dev (>= 1.16.1.1), debhelper-compat (= 12)
+Build-Depends: dpkg-dev (>= 1.22.5), dpkg-dev (>= 1.16.1.1), debhelper-compat (= 12)
 Build-Depends-indep: doxygen, graphviz
 Vcs-Browser: https://salsa.debian.org/debian/libmspack
 Vcs-Git: https://salsa.debian.org/debian/libmspack.git
 Homepage: https://www.cabextract.org.uk/libmspack/
 XS-Pexip-Upstream: http://deb.debian.org/debian/ trixie
 
-Package: libmspack0
+Package: libmspack0t64
+Provides: ${t64:Provides}
+Replaces: libmspack0
+Breaks: libmspack0 (<< ${source:Version})
 Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
@@ -28,7 +31,7 @@ Package: libmspack-dev
 Architecture: any
 Multi-Arch: same
 Section: libdevel
-Depends: ${misc:Depends}, libmspack0 (= ${binary:Version})
+Depends: ${misc:Depends}, libmspack0t64 (= ${binary:Version})
 Description: library for Microsoft compression formats (development files)
  The purpose of libmspack is to provide both compression and decompression of
  some loosely related file formats used by Microsoft. The intention is to
